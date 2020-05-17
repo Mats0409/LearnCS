@@ -1,15 +1,12 @@
-﻿using System;
-using LearnCSharp.libGLFW;
+﻿using LearnCSharp.libGLFW;
 using SkiaSharp;
 
 namespace LearnCSharp.Mats
 {
 	public class Scene
 	{
-		public const int ViewWidth = 1024;
-		public const int ViewHeight = 768;
-
-		public const int TextSize = 32;
+		public const int ViewWidth = 1280;
+		public const int ViewHeight = 720;
 
 		public SKColor BackgroundColor = SKColors.SkyBlue;
 
@@ -57,7 +54,7 @@ namespace LearnCSharp.Mats
 
 		public void Draw(SKCanvas canvas)
 		{
-			canvas.DrawText("Click to set ball", TextPaint.TextSize, TextPaint.TextSize, TextPaint);
+			canvas.DrawText("Click to set ball. Press ALT+ENTER to toggle fullscreen.", TextPaint.TextSize, TextPaint.TextSize, TextPaint);
 			canvas.DrawCircle(BallPositionX, BallPositionY, BallRadius, BallPaint);
 		}
 	}
