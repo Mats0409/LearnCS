@@ -6,12 +6,16 @@
             "command": "dotnet",
             "type": "process",
             "args": [
-                "build",
+                "run",
                 "${workspaceFolder}/LearnCSharp.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "publish",

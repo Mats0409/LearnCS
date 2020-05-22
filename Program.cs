@@ -69,6 +69,8 @@ namespace LearnCSharp
 				// Update the scene, moving it forward in time.
 				scene.Update((float)frameDuration.TotalSeconds, inputState);
 
+				inputState.Update();
+
 				if (inputState.IsKeyDown(Key.Enter) && inputState.IsKeyDown(Key.LeftAlt))
 				{
 					if (Glfw.GetWindowMonitor(windowPtr) == IntPtr.Zero)
