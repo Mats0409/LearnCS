@@ -18,7 +18,7 @@ namespace LearnCSharp.libGLFW
 	/// </summary>
 	public static class Glfw
 	{
-		private const string Glfw3Dll = "glfw3";
+		private const string Glfw3Dll = "glfw";
 
 		#region Enum
 

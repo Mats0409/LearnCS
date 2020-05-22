@@ -16,25 +16,16 @@
   </PropertyGroup>
 
   <Target Name="UnzipArchive" BeforeTargets="Build" Condition="!Exists('$(TargetDir)glfw3.dll') and '$(OS)' == 'Windows_NT'">
-    <DownloadFile 
-      SourceUrl="https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN64.zip" 
-      DestinationFolder="$(TargetDir)"
-      DestinationFileName="glfw-windows.zip"/>
+    <DownloadFile SourceUrl="https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN64.zip" DestinationFolder="$(TargetDir)" DestinationFileName="glfw-windows.zip" />
 
-    <Unzip
-      SourceFiles="$(TargetDir)glfw-windows.zip"
-      DestinationFolder="$(TargetDir)"
-      OverwriteReadOnlyFiles="true"
-    />
+    <Unzip SourceFiles="$(TargetDir)glfw-windows.zip" DestinationFolder="$(TargetDir)" OverwriteReadOnlyFiles="true" />
 
-    <Copy
-      SourceFiles="$(TargetDir)glfw-3.3.2.bin.WIN64\lib-vc2019\glfw3.dll"
-      DestinationFolder="$(TargetDir)"
-    />
+    <Copy SourceFiles="$(TargetDir)glfw-3.3.2.bin.WIN64\lib-vc2019\glfw3.dll" DestinationFolder="$(TargetDir)" />
   </Target>
   <Target Name="PreBuild">
   </Target>
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="1.68.2.1" />
+    <PackageReference Include="SkiaSharp" Version="1.68.3" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="1.68.3" />
   </ItemGroup>
 </Project>
