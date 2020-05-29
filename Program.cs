@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using LearnCSharp.libGLFW;
 using LearnCSharp.Mats;
 using SkiaSharp;
@@ -47,9 +48,22 @@ namespace LearnCSharp
 
 			var inputState = new InputState(windowPtr);
 
+			var stopwatch = new Stopwatch();
+
+            using var fpsTextPaint = new SKPaint
+            {
+                Style = SKPaintStyle.Fill,
+                Color = SKColors.Green,
+                IsAntialias = true,
+                TextSize = 16,
+            };
+
+			TimeSpan renderDuration = default;
+			TimeSpan updateDuration = default;
+
 			while (Glfw.WindowShouldClose(windowPtr) == Glfw.False)
 			{
-				// stopwatch.Restart();
+				stopwatch.Restart();
 
 				// Let GLFW process any queued input events, like keyboard, mouse, ...
 				Glfw.PollEvents();
@@ -60,16 +74,26 @@ namespace LearnCSharp
 				// Draw to scene to the canvas
 				scene.Draw(skCanvas);
 
+	            skCanvas.DrawText($"Render:{renderDuration.TotalMilliseconds:0.0}ms Update:{updateDuration.TotalMilliseconds:0.0}ms", fpsTextPaint.TextSize, fpsTextPaint.TextSize, fpsTextPaint);
+
 				// Flush all pending Skia drawing commands
 				grContext.Flush();
 
 				// Present the canvas on the display
 				Glfw.SwapBuffers(windowPtr);
 
+				renderDuration = stopwatch.Elapsed;
+
+				stopwatch.Restart();
+
 				// Update the scene, moving it forward in time.
 				scene.Update((float)frameDuration.TotalSeconds, inputState);
 
 				inputState.Update();
+
+				updateDuration = stopwatch.Elapsed;
+
+				//Glfw.SetWindowTitle(windowPtr, );
 
 				if (inputState.IsKeyDown(Key.Enter) && inputState.IsKeyDown(Key.LeftAlt))
 				{
