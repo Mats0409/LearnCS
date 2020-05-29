@@ -9,19 +9,21 @@ namespace LearnCSharp.Mats
         public const int ViewWidth = 1280;
         public const int ViewHeight = 720;
 
+        public const int BallCount = 100;
+
         public SKColor BackgroundColor = SKColors.SkyBlue;
 
         public SKPaint BallPaint;
         public SKPaint TextPaint;
 
-        public float BallPositionX;
-        public float BallPositionY;
+        public float[] BallPositionsX = new float[BallCount];
+        public float[] BallPositionsY = new float[BallCount];
 
         public static float BallRadius = 20f;
 
         // Velocity, in pixels per second.
-        public static float BallVelocityX = 0;
-        public static float BallVelocityY = 70;
+        public static float[] BallVelocitiesX = new float[BallCount];
+        public static float[] BallVelocitiesY = new float[BallCount];
 
         Random rnd = new Random();
 
@@ -32,12 +34,16 @@ namespace LearnCSharp.Mats
 
         public Scene()
         {
-            BallPositionX = rnd.Next(0, ViewWidth);
-            BallPositionY = rnd.Next(0, ViewHeight);
 
-            BallVelocityX = rnd.Next(-100, 100);
-            BallVelocityY = rnd.Next(-100, 100);
 
+            for (int i = 0; i < BallCount; i++)
+            {
+                BallPositionsY[i] = rnd.Next(0, ViewHeight);
+                BallPositionsX[i] = rnd.Next(0, ViewWidth);
+
+                BallVelocitiesX[i] = rnd.Next(-100, 100);
+                BallVelocitiesY[i] = rnd.Next(-100, 100);
+            }
 
             BallPaint = new SKPaint
             {
@@ -58,29 +64,36 @@ namespace LearnCSharp.Mats
 
         public void Update(float deltaTimeInSeconds, InputState input)
         {
-            BallPositionX = (BallPositionX + deltaTimeInSeconds * BallVelocityX) % ViewWidth;
-            BallPositionY = (BallPositionY + deltaTimeInSeconds * BallVelocityY) % ViewHeight;
+            for (int i = 0; i < BallCount; i++)
+            {
+                BallPositionsX[i] = (BallPositionsX[i] + deltaTimeInSeconds * BallVelocitiesX[i]) % ViewWidth;
+                BallPositionsY[i] = (BallPositionsY[i] + deltaTimeInSeconds * BallVelocitiesY[i]) % ViewHeight;
 
+                if (input.IsMouseClicked(MouseButton.Left))
+                {
+                    BallPositionsX[i] = rnd.Next(0, ViewWidth);
+                    BallPositionsY[i] = rnd.Next(0, ViewHeight);
+
+                    BallVelocitiesX[i] = rnd.Next(-100, 100);
+                    BallVelocitiesY[i] = rnd.Next(-100, 100);
+                }
+            }
 
             PreviousMouseDown = CurrentMouseDown;
 
             CurrentMouseDown = input.IsMouseDown(MouseButton.Left);
-                      
-            // if (!PreviousMouseDown && CurrentMouseDown)
-            if (input.IsMouseClicked(MouseButton.Left))
-            {
-                BallPositionX = rnd.Next(0, ViewWidth);
-                BallPositionY = rnd.Next(0, ViewHeight);
 
-                BallVelocityX = rnd.Next(-100, 100);
-                BallVelocityY = rnd.Next(-100, 100);
-            }
+            // if (!PreviousMouseDown && CurrentMouseDown)
         }
 
         public void Draw(SKCanvas canvas)
         {
             canvas.DrawText("Click to set ball. Press ALT+ENTER to toggle fullscreen.", TextPaint.TextSize, TextPaint.TextSize, TextPaint);
-            canvas.DrawCircle(BallPositionX, BallPositionY, BallRadius, BallPaint);
+
+            for (int i = 0; i < BallCount; i++)
+            {
+                canvas.DrawCircle(BallPositionsX[i], BallPositionsY[i], BallRadius, BallPaint);
+            }
         }
     }
 }
