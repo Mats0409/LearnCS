@@ -10,7 +10,7 @@ namespace LearnCSharp.Mats
         public const int ViewWidth = 1280;
         public const int ViewHeight = 720;
 
-        public const int BallCount = 100;
+        public const int BallCount = 20;
 
         public SKColor BackgroundColor = SKColors.SkyBlue;
 
@@ -20,7 +20,7 @@ namespace LearnCSharp.Mats
 
         public Vector2[] BallPositions = new Vector2[BallCount];
 
-        public static float BallRadius = 250f / MathF.Sqrt(BallCount);
+        public static float BallRadius = 225f / MathF.Sqrt(BallCount);
 
         // Velocity, in pixels per second.
         public Vector2[] BallVelocities = new Vector2[BallCount];
@@ -127,25 +127,46 @@ namespace LearnCSharp.Mats
 
         public void Draw(SKCanvas canvas)
         {
-            var p1 = BallPositions[0];
 
             for (int i = 0; i < BallCount; i++)
             {
                 canvas.DrawCircle(BallPositions[i].X, BallPositions[i].Y, BallRadius, BallPaint);
             }
 
-            for (int i = 1; i < BallCount; i++)
+            for (int i1 = 0; i1 < BallCount - 1; i1++)
             {
-                var p2 = BallPositions[i];
-                var dp = p1 - p2;
-                var d = dp.Length();
+                var p1 = BallPositions[i1];
+                var v1 = BallVelocities[i1];
 
-                if (d < BallRadius * 2)
+
+                for (int i2 = i1 + 1; i2 < BallCount; i2++)
                 {
-                    canvas.DrawCircle(BallPositions[0].X, BallPositions[0].Y, BallRadius, HitPaint);
-                }
-            }
+                    var p2 = BallPositions[i2];
+                    var v2 = BallVelocities[i2];
 
+                    var dp = p1 - p2;
+
+                    var d = dp.Length();
+
+                    if (d < BallRadius * 2)
+                    {
+                        canvas.DrawCircle(BallPositions[i1].X, BallPositions[i1].Y, BallRadius, HitPaint);
+                        var dn = Vector2.Normalize(dp);
+
+                        var a1 = Vector2.Dot(dn, v1) * dn;
+                        var a2 = Vector2.Dot(dn, v2) * dn;
+
+                        var b1 = v1 - a1;
+                        var b2 = v2 - a2;
+
+                        BallVelocities[i1] = b1 + a2;
+                        BallVelocities[i2] = b2 + a1;
+                        break;
+                    }
+                }
+
+
+            }
         }
     }
 }
