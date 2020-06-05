@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using LearnCSharp.libGLFW;
 using SkiaSharp;
 
@@ -9,21 +10,20 @@ namespace LearnCSharp.Mats
         public const int ViewWidth = 1280;
         public const int ViewHeight = 720;
 
-        public const int BallCount = 10;
+        public const int BallCount = 100;
 
         public SKColor BackgroundColor = SKColors.SkyBlue;
 
         public SKPaint BallPaint;
+        public SKPaint HitPaint;
         public SKPaint TextPaint;
 
-        public float[] BallPositionsX = new float[BallCount];
-        public float[] BallPositionsY = new float[BallCount];
+        public Vector2[] BallPositions = new Vector2[BallCount];
 
-        public static float BallRadius = 100f / MathF.Sqrt(BallCount);
+        public static float BallRadius = 250f / MathF.Sqrt(BallCount);
 
         // Velocity, in pixels per second.
-        public static float[] BallVelocitiesX = new float[BallCount];
-        public static float[] BallVelocitiesY = new float[BallCount];
+        public Vector2[] BallVelocities = new Vector2[BallCount];
 
         Random rnd = new Random();
 
@@ -48,6 +48,13 @@ namespace LearnCSharp.Mats
                 IsAntialias = true
             };
 
+            HitPaint = new SKPaint
+            {
+                Style = SKPaintStyle.Fill,
+                Color = SKColors.Red,
+                IsAntialias = true
+            };
+
             TextPaint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
@@ -63,43 +70,38 @@ namespace LearnCSharp.Mats
         private void Randomize(int i)
         {
             var angle = rnd.Next(0, 360) * MathF.PI / 180;
-            var speed = 5000;
+            var speed = 100;
 
-            BallPositionsY[i] = rnd.Next(0, ViewHeight);
-            BallPositionsX[i] = rnd.Next(0, ViewWidth);
+            BallPositions[i] = new Vector2(rnd.Next(0, ViewWidth), rnd.Next(0, ViewHeight));
 
-            BallVelocitiesX[i] = MathF.Cos(angle) * speed;
-            BallVelocitiesY[i] = MathF.Sin(angle) * speed;
+            BallVelocities[i] = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * speed;
         }
 
         public void Update(float deltaTimeInSeconds, InputState input)
         {
             for (int i = 0; i < BallCount; i++)
             {
-                float px = BallPositionsX[i];
-                float py = BallPositionsY[i];
-                float vx = BallVelocitiesX[i];
-                float vy = BallVelocitiesY[i];
+                Vector2 p = BallPositions[i];
+                Vector2 v = BallVelocities[i];
 
-                px = (px + deltaTimeInSeconds * vx);
-                py = (py + deltaTimeInSeconds * vy);
+                p = (p + deltaTimeInSeconds * v);
 
-                if (px < 0 + BallRadius && vx < 0)
+                if (p.X < 0 + BallRadius && v.X < 0)
                 {
-                    vx = -vx;
+                    v.X = -v.X;
                 }
-                if (px > ViewWidth - BallRadius && vx > 0)
+                if (p.X > ViewWidth - BallRadius && v.X > 0)
                 {
-                    vx = -vx;
+                    v.X = -v.X;
                 }
 
-                if (py < 0 + BallRadius && vy < 0)
+                if (p.Y < 0 + BallRadius && v.Y < 0)
                 {
-                    vy = -vy;
+                    v.Y = -v.Y;
                 }
-                if (py > ViewHeight - BallRadius && vy > 0)
+                if (p.Y > ViewHeight - BallRadius && v.Y > 0)
                 {
-                    vy = -vy;
+                    v.Y = -v.Y;
                 }
 
 
@@ -111,10 +113,8 @@ namespace LearnCSharp.Mats
                 }
                 else
                 {
-                    BallPositionsX[i] = px;
-                    BallPositionsY[i] = py;
-                    BallVelocitiesX[i] = vx;
-                    BallVelocitiesY[i] = vy;
+                    BallPositions[i] = p;
+                    BallVelocities[i] = v;
                 }
             }
 
@@ -127,12 +127,25 @@ namespace LearnCSharp.Mats
 
         public void Draw(SKCanvas canvas)
         {
-            // canvas.DrawText("Click to set ball. Press ALT+ENTER to toggle fullscreen.", TextPaint.TextSize, TextPaint.TextSize, TextPaint);
+            var p1 = BallPositions[0];
 
             for (int i = 0; i < BallCount; i++)
             {
-                canvas.DrawCircle(BallPositionsX[i], BallPositionsY[i], BallRadius, BallPaint);
+                canvas.DrawCircle(BallPositions[i].X, BallPositions[i].Y, BallRadius, BallPaint);
             }
+
+            for (int i = 1; i < BallCount; i++)
+            {
+                var p2 = BallPositions[i];
+                var dp = p1 - p2;
+                var d = dp.Length();
+
+                if (d < BallRadius * 2)
+                {
+                    canvas.DrawCircle(BallPositions[0].X, BallPositions[0].Y, BallRadius, HitPaint);
+                }
+            }
+
         }
     }
 }
