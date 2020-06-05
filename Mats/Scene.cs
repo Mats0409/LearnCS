@@ -10,7 +10,7 @@ namespace LearnCSharp.Mats
         public const int ViewWidth = 1280;
         public const int ViewHeight = 720;
 
-        public const int BallCount = 20;
+        public const int BallCount = 100;
 
         public SKColor BackgroundColor = SKColors.SkyBlue;
 
@@ -20,7 +20,7 @@ namespace LearnCSharp.Mats
 
         public Vector2[] BallPositions = new Vector2[BallCount];
 
-        public static float BallRadius = 225f / MathF.Sqrt(BallCount);
+        public static float BallRadius = 100f / MathF.Sqrt(BallCount);
 
         // Velocity, in pixels per second.
         public Vector2[] BallVelocities = new Vector2[BallCount];
@@ -153,15 +153,22 @@ namespace LearnCSharp.Mats
                         canvas.DrawCircle(BallPositions[i1].X, BallPositions[i1].Y, BallRadius, HitPaint);
                         var dn = Vector2.Normalize(dp);
 
-                        var a1 = Vector2.Dot(dn, v1) * dn;
-                        var a2 = Vector2.Dot(dn, v2) * dn;
+                        float d1 = Vector2.Dot(dn, v1);
+                        float d2 = Vector2.Dot(dn, v2);
 
-                        var b1 = v1 - a1;
-                        var b2 = v2 - a2;
+                        if (d1 < 0 || d2 > 0)
+                        {
+                            var a1 = d1 * dn;
+                            var a2 = d2 * dn;
 
-                        BallVelocities[i1] = b1 + a2;
-                        BallVelocities[i2] = b2 + a1;
-                        break;
+                            var b1 = v1 - a1;
+                            var b2 = v2 - a2;
+
+                            BallVelocities[i1] = b1 + a2;
+                            BallVelocities[i2] = b2 + a1;
+                            break;
+
+                        }
                     }
                 }
 
