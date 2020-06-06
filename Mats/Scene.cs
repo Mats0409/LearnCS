@@ -34,8 +34,6 @@ namespace LearnCSharp.Mats
 
         public Scene()
         {
-
-
             for (int i = 0; i < BallCount; i++)
             {
                 Randomize(i);
@@ -58,11 +56,10 @@ namespace LearnCSharp.Mats
             TextPaint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColors.White,
+                Color = SKColors.Green,
                 IsAntialias = true,
-                TextSize = 32
+                TextSize = 16
             };
-
         }
 
 
@@ -127,6 +124,18 @@ namespace LearnCSharp.Mats
 
         public void Draw(SKCanvas canvas)
         {
+            // Compute total kinetic energy. This should stay the same.
+            // Formula for kinetic energy = 1/2 * ||velocity||^2 * mass
+            var energy = 0.0;
+            for (int i = 0; i < BallCount; i++)
+            {
+                const float mass = 1;
+                var v = BallVelocities[i];
+                energy += Vector2.Dot(v, v) * mass * 0.5f;
+            }
+
+            TextPaint.TextAlign = SKTextAlign.Right;
+            canvas.DrawText($"Energy: {energy:0.0} Joule", ViewWidth, TextPaint.TextSize, TextPaint);
 
             for (int i = 0; i < BallCount; i++)
             {

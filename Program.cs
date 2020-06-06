@@ -25,7 +25,7 @@ namespace LearnCSharp
 
 			// Center the window on the primary monitor
 			Glfw.SetWindowPos(windowPtr,
-				workAreaX + (workAreaWidth - Scene.ViewWidth) / 2, 
+				workAreaX + (workAreaWidth - Scene.ViewWidth) / 2,
 				workAreaY + (workAreaHeight - Scene.ViewHeight) / 2);
 
 			// Make sure the OpenGL rendering context is set on the current thread,
@@ -50,13 +50,13 @@ namespace LearnCSharp
 
 			var stopwatch = new Stopwatch();
 
-            using var fpsTextPaint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = SKColors.Green,
-                IsAntialias = true,
-                TextSize = 16,
-            };
+			using var fpsTextPaint = new SKPaint
+			{
+				Style = SKPaintStyle.Fill,
+				Color = SKColors.Green,
+				IsAntialias = true,
+				TextSize = 16,
+			};
 
 			TimeSpan renderDuration = default;
 			TimeSpan updateDuration = default;
@@ -74,7 +74,7 @@ namespace LearnCSharp
 				// Draw to scene to the canvas
 				scene.Draw(skCanvas);
 
-	            skCanvas.DrawText($"Render:{renderDuration.TotalMilliseconds:0.0}ms Update:{updateDuration.TotalMilliseconds:0.0}ms", fpsTextPaint.TextSize, fpsTextPaint.TextSize, fpsTextPaint);
+				skCanvas.DrawText($"Render:{renderDuration.TotalMilliseconds:0.0}ms Update:{updateDuration.TotalMilliseconds:0.0}ms", fpsTextPaint.TextSize, fpsTextPaint.TextSize, fpsTextPaint);
 
 				// Flush all pending Skia drawing commands
 				grContext.Flush();
