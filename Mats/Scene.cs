@@ -13,18 +13,9 @@ namespace LearnCSharp.Mats
 
         public const int BallCount = 50;
 
-        public SKColor BackgroundColor = SKColors.SkyBlue;
+        public Style Style;
 
-        public SKPaint BallPaint;
-        public SKPaint HitPaint;
-        public SKPaint TextPaint;
-
-        public Vector2[] BallPositions = new Vector2[BallCount];
-
-        public static float BallRadius = 200f / MathF.Sqrt(BallCount);
-
-        // Velocity, in pixels per second.
-        public Vector2[] BallVelocities = new Vector2[BallCount];
+        public Ball[] Balls;
 
         Random rnd = new Random();
 
@@ -33,34 +24,16 @@ namespace LearnCSharp.Mats
 
         public Scene()
         {
-            
+            Style = new Style();
+            Balls = new Ball[BallCount];
+
 
             for (int i = 0; i < BallCount; i++)
             {
+                Balls[i] = new Ball();
                 Randomize(i);
             }
 
-            BallPaint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = SKColors.Yellow,
-                IsAntialias = true
-            };
-
-            HitPaint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = SKColors.Red,
-                IsAntialias = true
-            };
-
-            TextPaint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = SKColors.White,
-                IsAntialias = true,
-                TextSize = 20
-            };
         }
 
 
@@ -70,97 +43,56 @@ namespace LearnCSharp.Mats
             var angle = rnd.Next(0, 360) * MathF.PI / 180;
             var speed = 100;
 
-            BallPositions[i] = new Vector2(rnd.Next(0, ViewWidth), rnd.Next(0, ViewHeight));
+            var margin = (int)Math.Ceiling(Ball.Radius);
 
-            BallVelocities[i] = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * speed;
+            Balls[i].Position = new Vector2(rnd.Next(margin, ViewWidth - margin), rnd.Next(margin, ViewHeight - margin));
+
+            Balls[i].Velocity = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * speed;
         }
 
         public void Update(float deltaTimeInSeconds, InputState input)
         {
-            for (int i = 0; i < BallCount; i++)
+            for (int i = 0; i < Balls.Length; i++)
             {
-                Vector2 p = BallPositions[i];
-                Vector2 v = BallVelocities[i];
+                Balls[i].Update(deltaTimeInSeconds, input);
 
-                p = (p + deltaTimeInSeconds * v);
-
-                if (p.X < 0 + BallRadius && v.X < 0)
-                {
-                    v.X = -v.X;
-                }
-                if (p.X > ViewWidth - BallRadius && v.X > 0)
-                {
-                    v.X = -v.X;
-                }
-
-                if (p.Y < 0 + BallRadius && v.Y < 0)
-                {
-                    v.Y = -v.Y;
-                }
-                if (p.Y > ViewHeight - BallRadius && v.Y > 0)
-                {
-                    v.Y = -v.Y;
-                }
-
-
+                Balls[i].IsHit = false;
 
 
                 if (input.IsMouseClicked(MouseButton.Left))
                 {
                     Randomize(i);
                 }
-                else
-                {
-                    BallPositions[i] = p;
-                    BallVelocities[i] = v;
-                }
+
             }
+
 
             PreviousMouseDown = CurrentMouseDown;
 
             CurrentMouseDown = input.IsMouseDown(MouseButton.Left);
 
-            // if (!PreviousMouseDown && CurrentMouseDown)
-        }
-
-        public void Draw(SKCanvas canvas)
-        {
-            // Compute total kinetic energy. This should stay the same.
-            // Formula for kinetic energy = 1/2 * ||velocity||^2 * mass
-            var energy = 0.0;
-            for (int i = 0; i < BallCount; i++)
-            {
-                const float mass = 1;
-                var v = BallVelocities[i];
-                energy += Vector2.Dot(v, v) * mass * 0.5f;
-            }
-
-            TextPaint.TextAlign = SKTextAlign.Right;
-            canvas.DrawText($"Energy: {energy:0.0} Joule", ViewWidth, TextPaint.TextSize, TextPaint);
-
-            for (int i = 0; i < BallCount; i++)
-            {
-                canvas.DrawCircle(BallPositions[i].X, BallPositions[i].Y, BallRadius, BallPaint);
-            }
-
+            // Physics
             for (int i1 = 0; i1 < BallCount - 1; i1++)
             {
-                var p1 = BallPositions[i1];
-                var v1 = BallVelocities[i1];
+                var b1 = Balls[i1];
+                var p1 = b1.Position;
+                var v1 = b1.Velocity;
 
 
                 for (int i2 = i1 + 1; i2 < BallCount; i2++)
                 {
-                    var p2 = BallPositions[i2];
-                    var v2 = BallVelocities[i2];
+                    var b2 = Balls[i2];
+                    var p2 = b2.Position;
+                    var v2 = b2.Velocity;
 
                     var dp = p1 - p2;
 
                     var d = dp.Length();
 
-                    if (d < BallRadius * 2)
+                    if (d < Ball.Radius * 2)
                     {
-                        canvas.DrawCircle(BallPositions[i1].X, BallPositions[i1].Y, BallRadius, HitPaint);
+                        // ??? canvas.DrawCircle(BallPositions[i1].X, BallPositions[i1].Y, BallRadius, HitPaint);
+
                         var dn = Vector2.Normalize(dp);
 
                         float d1 = Vector2.Dot(dn, v1);
@@ -168,20 +100,32 @@ namespace LearnCSharp.Mats
 
                         if (d1 < 0 || d2 > 0)
                         {
-                            var a1 = d1 * dn;
-                            var a2 = d2 * dn;
+                            var t1 = d1 * dn;
+                            var t2 = d2 * dn;
 
-                            var b1 = v1 - a1;
-                            var b2 = v2 - a2;
+                            var n1 = v1 - t1;
+                            var n2 = v2 - t2;
 
-                            BallVelocities[i1] = b1 + a2;
-                            BallVelocities[i2] = b2 + a1;
+                            b1.Velocity = n1 + t2;
+                            b2.Velocity = n2 + t1;
+
+                            b1.IsHit = true;
+                            b2.IsHit = true;
                             break;
 
                         }
                     }
                 }
 
+            }
+        }
+
+        public void Draw(SKCanvas canvas)
+        {
+
+            for (int i = 0; i < BallCount; i++)
+            {
+                Balls[i].Draw(Style, canvas);
 
             }
         }

@@ -43,6 +43,7 @@ namespace LearnCSharp
 			using var skCanvas = skSurface.Canvas;
 
 			var scene = new Scene();
+			var style = new Style();
 
 			var frameDuration = TimeSpan.FromSeconds(1.0 / videoMode.RefreshRate);
 
@@ -69,7 +70,7 @@ namespace LearnCSharp
 				Glfw.PollEvents();
 
 				// Clear the drawing canvas
-				skCanvas.Clear(scene.BackgroundColor);
+				skCanvas.Clear(style.BackgroundColor);
 
 				// Draw to scene to the canvas
 				scene.Draw(skCanvas);

@@ -1,4 +1,5 @@
-﻿/*
+﻿#nullable disable
+/*
  * Based on https://github.com/ForeverZer0/glfw-net
  *
  *	Copyright 2018 Eric Freed, 2020 Peter Verswyvelen
