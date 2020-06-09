@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Runtime.InteropServices.WindowsRuntime;
 using LearnCSharp.libGLFW;
 using SkiaSharp;
 
@@ -10,7 +11,7 @@ namespace LearnCSharp.Mats
         public const int ViewWidth = 1280;
         public const int ViewHeight = 720;
 
-        public const int BallCount = 100;
+        public const int BallCount = 50;
 
         public SKColor BackgroundColor = SKColors.SkyBlue;
 
@@ -20,7 +21,7 @@ namespace LearnCSharp.Mats
 
         public Vector2[] BallPositions = new Vector2[BallCount];
 
-        public static float BallRadius = 100f / MathF.Sqrt(BallCount);
+        public static float BallRadius = 200f / MathF.Sqrt(BallCount);
 
         // Velocity, in pixels per second.
         public Vector2[] BallVelocities = new Vector2[BallCount];
@@ -30,10 +31,10 @@ namespace LearnCSharp.Mats
         bool PreviousMouseDown;
         bool CurrentMouseDown;
 
-        bool Click;
-
         public Scene()
         {
+            
+
             for (int i = 0; i < BallCount; i++)
             {
                 Randomize(i);
@@ -56,9 +57,9 @@ namespace LearnCSharp.Mats
             TextPaint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColors.Green,
+                Color = SKColors.White,
                 IsAntialias = true,
-                TextSize = 16
+                TextSize = 20
             };
         }
 

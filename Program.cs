@@ -19,7 +19,7 @@ namespace LearnCSharp
 
 			// For a full-screen game, replace IntPtr.Zero with primaryMonitorPtr
 			IntPtr monitorPtr = IntPtr.Zero;
-
+            
 			// Create a GLFW window
 			var windowPtr = Glfw.CreateWindow(Scene.ViewWidth, Scene.ViewHeight, "C# tutorial for Mats", monitorPtr, IntPtr.Zero);
 
@@ -52,10 +52,10 @@ namespace LearnCSharp
 
 			using var fpsTextPaint = new SKPaint
 			{
-				Style = SKPaintStyle.Fill,
-				Color = SKColors.Green,
+				Style = SKPaintStyle.Fill,                
+				Color = SKColors.White,
 				IsAntialias = true,
-				TextSize = 16,
+				TextSize = 20,
 			};
 
 			TimeSpan renderDuration = default;
@@ -74,7 +74,7 @@ namespace LearnCSharp
 				// Draw to scene to the canvas
 				scene.Draw(skCanvas);
 
-				skCanvas.DrawText($"Render:{renderDuration.TotalMilliseconds:0.0}ms Update:{updateDuration.TotalMilliseconds:0.0}ms", fpsTextPaint.TextSize, fpsTextPaint.TextSize, fpsTextPaint);
+				skCanvas.DrawText($"Render: {renderDuration.TotalMilliseconds:0.0}ms  Update: {updateDuration.TotalMilliseconds:0.0}ms", fpsTextPaint.TextSize, fpsTextPaint.TextSize, fpsTextPaint);
 
 				// Flush all pending Skia drawing commands
 				grContext.Flush();
