@@ -22,46 +22,35 @@ namespace LearnCSharp.Mats
         bool PreviousMouseDown;
         bool CurrentMouseDown;
 
-        public Scene()
+        public Scene(Style style)
         {
-            Style = new Style();
+            Style = style;
+            
             Balls = new Ball[BallCount];
 
 
             for (int i = 0; i < BallCount; i++)
             {
-                Balls[i] = new Ball();
-                Randomize(i);
+                var ball = new Ball();;
+                Balls[i] = ball;
+                ball.Randomize(rnd);
             }
 
         }
 
 
-        // Assigns random position and velocity to ball[i] 
-        private void Randomize(int i)
-        {
-            var angle = rnd.Next(0, 360) * MathF.PI / 180;
-            var speed = 100;
-
-            var margin = (int)Math.Ceiling(Ball.Radius);
-
-            Balls[i].Position = new Vector2(rnd.Next(margin, ViewWidth - margin), rnd.Next(margin, ViewHeight - margin));
-
-            Balls[i].Velocity = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * speed;
-        }
-
         public void Update(float deltaTimeInSeconds, InputState input)
         {
-            for (int i = 0; i < Balls.Length; i++)
+            foreach (var ball in Balls)
             {
-                Balls[i].Update(deltaTimeInSeconds, input);
+                ball.Update(deltaTimeInSeconds, input);
 
-                Balls[i].IsHit = false;
+                ball.IsHit = false;
 
 
                 if (input.IsMouseClicked(MouseButton.Left))
                 {
-                    Randomize(i);
+                    ball.Randomize(rnd);
                 }
 
             }

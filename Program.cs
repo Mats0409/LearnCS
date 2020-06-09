@@ -42,8 +42,8 @@ namespace LearnCSharp
 			// get the canvas from the surface
 			using var skCanvas = skSurface.Canvas;
 
-			var scene = new Scene();
-			var style = new Style();
+			var style = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
+			var scene = new Scene(style);
 
 			var frameDuration = TimeSpan.FromSeconds(1.0 / videoMode.RefreshRate);
 

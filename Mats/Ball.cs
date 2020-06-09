@@ -15,6 +15,21 @@ namespace LearnCSharp.Mats
 
         public static float Radius = 200f / MathF.Sqrt(Scene.BallCount);
 
+
+        // Assigns random position and velocity to this ball.
+        public void Randomize(Random rnd)
+        {
+            var angle = rnd.Next(0, 360) * MathF.PI / 180;
+            var speed = 100;
+
+            var margin = (int)Math.Ceiling(Ball.Radius);
+
+            Position = new Vector2(rnd.Next(margin, Scene.ViewWidth - margin), rnd.Next(margin, Scene.ViewHeight - margin));
+
+            Velocity = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * speed;
+        }
+
+
         public void Update(float deltaTimeInSeconds, InputState input)
         {
 

@@ -4,33 +4,33 @@ namespace LearnCSharp.Mats
 {
     public class Style
     {
-        public SKColor BackgroundColor = SKColors.SkyBlue;
+        public readonly SKColor BackgroundColor;
+        public readonly SKPaint BallPaint;
+        public readonly SKPaint BallHitPaint;
+        public readonly SKPaint TextPaint;
 
-        public SKPaint BallPaint;
-        public SKPaint BallHitPaint;
-        public SKPaint TextPaint;
-
-        public Style()
+        public Style(SKColor backgroundColor, SKColor ballColor, SKColor hitColor, SKColor textColor)
         {
+            BackgroundColor = backgroundColor;
 
             BallPaint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColors.Yellow,
+                Color = ballColor,
                 IsAntialias = true
             };
 
             BallHitPaint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColors.Red,
+                Color = hitColor,
                 IsAntialias = true
             };
 
             TextPaint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = SKColors.White,
+                Color = textColor,
                 IsAntialias = true,
                 TextSize = 20
             };
