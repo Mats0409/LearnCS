@@ -15,6 +15,7 @@ namespace LearnCSharp.Mats
 
         public Style Style;
 
+
         public Ball[] Balls;
 
         Random rnd = new Random();
@@ -41,6 +42,10 @@ namespace LearnCSharp.Mats
 
         public void Update(float deltaTimeInSeconds, InputState input)
         {
+            var style0 = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
+            var style1 = new Style(SKColors.DarkBlue, SKColors.Orange, SKColors.PaleVioletRed, SKColors.DarkGray);
+           
+
             foreach (var ball in Balls)
             {
                 ball.Update(deltaTimeInSeconds, input);
@@ -53,6 +58,10 @@ namespace LearnCSharp.Mats
                     ball.Randomize(rnd);
                 }
 
+                if (input.IsMouseClicked(MouseButton.Right))
+                {                   
+                    Style = style1;                
+                }
             }
 
 

@@ -42,8 +42,10 @@ namespace LearnCSharp
 			// get the canvas from the surface
 			using var skCanvas = skSurface.Canvas;
 
-			var style = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
-			var scene = new Scene(style);
+			var style0 = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
+            var style1 = new Style(SKColors.DarkBlue, SKColors.Orange, SKColors.Red, SKColors.DarkGray);
+
+            var scene = new Scene(style0);
 
 			var frameDuration = TimeSpan.FromSeconds(1.0 / videoMode.RefreshRate);
 
@@ -70,7 +72,7 @@ namespace LearnCSharp
 				Glfw.PollEvents();
 
 				// Clear the drawing canvas
-				skCanvas.Clear(style.BackgroundColor);
+				skCanvas.Clear(style0.BackgroundColor);
 
 				// Draw to scene to the canvas
 				scene.Draw(skCanvas);
