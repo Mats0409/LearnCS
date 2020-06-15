@@ -22,17 +22,18 @@ namespace LearnCSharp.Mats
 
         bool PreviousMouseDown;
         bool CurrentMouseDown;
+        bool DarkMode = false;
 
         public Scene(Style style)
         {
             Style = style;
-            
+
             Balls = new Ball[BallCount];
 
 
             for (int i = 0; i < BallCount; i++)
             {
-                var ball = new Ball();;
+                var ball = new Ball(); ;
                 Balls[i] = ball;
                 ball.Randomize(rnd);
             }
@@ -43,8 +44,21 @@ namespace LearnCSharp.Mats
         public void Update(float deltaTimeInSeconds, InputState input)
         {
             var style0 = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
-            var style1 = new Style(SKColors.DarkBlue, SKColors.Orange, SKColors.PaleVioletRed, SKColors.DarkGray);
-           
+            var style1 = new Style(SKColors.Gray, SKColors.Black, SKColors.WhiteSmoke, SKColors.White);
+
+            if (DarkMode == true)
+            {
+                Style = style1;
+            }
+            else
+            {
+                Style = style0;
+            }
+
+            if (input.IsMouseClicked(MouseButton.Right))
+            {
+                DarkMode = !DarkMode;
+            }
 
             foreach (var ball in Balls)
             {
@@ -52,15 +66,9 @@ namespace LearnCSharp.Mats
 
                 ball.IsHit = false;
 
-
                 if (input.IsMouseClicked(MouseButton.Left))
                 {
                     ball.Randomize(rnd);
-                }
-
-                if (input.IsMouseClicked(MouseButton.Right))
-                {                   
-                    Style = style1;                
                 }
             }
 

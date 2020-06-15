@@ -43,7 +43,7 @@ namespace LearnCSharp
 			using var skCanvas = skSurface.Canvas;
 
 			var style0 = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
-            var style1 = new Style(SKColors.DarkBlue, SKColors.Orange, SKColors.Red, SKColors.DarkGray);
+            var style1 = new Style(SKColors.Gray, SKColors.Black, SKColors.WhiteSmoke, SKColors.White);
 
             var scene = new Scene(style0);
 
