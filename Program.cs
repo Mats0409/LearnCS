@@ -45,7 +45,7 @@ namespace LearnCSharp
 			var style0 = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
             var style1 = new Style(SKColors.Gray, SKColors.Black, SKColors.WhiteSmoke, SKColors.White);
 
-            var scene = new Scene(style0);
+            var scene = new Scene(style0, style1);
 
 			var frameDuration = TimeSpan.FromSeconds(1.0 / videoMode.RefreshRate);
 

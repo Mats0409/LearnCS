@@ -13,7 +13,7 @@ namespace LearnCSharp.Mats
 
         public const int BallCount = 50;
 
-        public Style Style;
+        public Style[] Styles;
 
 
         public Ball[] Balls;
@@ -24,9 +24,13 @@ namespace LearnCSharp.Mats
         bool CurrentMouseDown;
         bool DarkMode = false;
 
-        public Scene(Style style)
+        public Vector2 Pos;
+
+        public Style Style => DarkMode ? Styles[0] : Styles[1];
+
+        public Scene(params Style[] styles)
         {
-            Style = style;
+            Styles = styles;
 
             Balls = new Ball[BallCount];
 
@@ -43,17 +47,6 @@ namespace LearnCSharp.Mats
 
         public void Update(float deltaTimeInSeconds, InputState input)
         {
-            var style0 = new Style(SKColors.SkyBlue, SKColors.Yellow, SKColors.Red, SKColors.White);
-            var style1 = new Style(SKColors.Gray, SKColors.Black, SKColors.WhiteSmoke, SKColors.White);
-
-            if (DarkMode == true)
-            {
-                Style = style1;
-            }
-            else
-            {
-                Style = style0;
-            }
 
             if (input.IsMouseClicked(MouseButton.Right))
             {
