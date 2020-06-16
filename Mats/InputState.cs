@@ -100,22 +100,25 @@ namespace LearnCSharp.Mats
         /// <returns></returns>
         public bool AreKeysDown(params Key[] key) => key.All(IsKeyDown);
 
-		public void Update() 
-		{
-			foreach (var pair in _currentKeyStates)
-			{
-				_previousKeyStates[pair.Key] = pair.Value;
-			}
+        public void Update()
+        {
+            foreach (var pair in _currentKeyStates)
+            {
+                _previousKeyStates[pair.Key] = pair.Value;
+            }
 
-			foreach (var pair in _currentMouseStates)
-			{
-				_previousMouseStates[pair.Key] = pair.Value;
-			}
-		}
+            foreach (var pair in _currentMouseStates)
+            {
+                _previousMouseStates[pair.Key] = pair.Value;
+            }
+        }
 
         private void OnKeyChanged(IntPtr window, Key key, int code, KeyState state, KeyModifier mods)
         {
-            _currentKeyStates[key] = state;
+            if (state != KeyState.Repeated)
+            {
+                _currentKeyStates[key] = state;
+            }
             KeyModifiers = mods;
         }
 
