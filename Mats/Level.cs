@@ -22,10 +22,13 @@ namespace LearnCSharp.Mats
                 player = player
             };
 
+            var tileMap = new TileMap();
+
             var scene = new Scene
             {
                 player,
-                energyBar
+                // energyBar,
+                tileMap
             };
 
             return scene;

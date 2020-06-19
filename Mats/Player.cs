@@ -18,7 +18,7 @@ namespace LearnCSharp.Mats
 
         SKPaint paint = new SKPaint
         {
-            Color = SKColors.Green,
+            Color = SKColors.LightGreen,
             IsAntialias = true
         };
 

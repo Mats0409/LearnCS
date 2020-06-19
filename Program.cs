@@ -24,6 +24,8 @@ namespace LearnCSharp
             // Create a GLFW window
             var windowPtr = Glfw.CreateWindow(workAreaWidth, workAreaHeight, "C# tutorial for Mats", monitorPtr, IntPtr.Zero);
 
+            Glfw.GetWindowSize(windowPtr, out var viewWidth, out var viewHeight);
+
             // Switch to full screen.
             // Glfw.SetWindowMonitor(windowPtr, primaryMonitorPtr, 0, 0, workAreaWidth, workAreaHeight, 60);
 
@@ -32,7 +34,7 @@ namespace LearnCSharp
             Glfw.MakeContextCurrent(windowPtr);
 
             var frameBufferInfo = new GRGlFramebufferInfo((uint)new UIntPtr(0), GRPixelConfig.Rgba8888.ToGlSizedFormat());
-            using var backendRenderTarget = new GRBackendRenderTarget(workAreaWidth, workAreaHeight, 0, 8, frameBufferInfo);
+            using var backendRenderTarget = new GRBackendRenderTarget(viewWidth, viewHeight, 0, 8, frameBufferInfo);
 
             using var grContext = GRContext.Create(GRBackend.OpenGL);
 
@@ -44,8 +46,6 @@ namespace LearnCSharp
             var scene = Level.Load();
 
             var frameDuration = TimeSpan.FromSeconds(1.0 / videoMode.RefreshRate);
-
-            var inputState = new InputState(windowPtr);
 
             var stopwatch = new Stopwatch();
 
@@ -60,6 +60,15 @@ namespace LearnCSharp
             TimeSpan renderDuration = default;
             TimeSpan updateDuration = default;
 
+            var viewScale = viewWidth / Grid.Width * 0.95f;
+            var viewTransform = new SKMatrix(
+                    viewScale, 0, viewWidth / 2f,
+                    0, viewScale, viewHeight / 2f,
+                    0, 0, 1);
+
+            var inputState = new InputState(windowPtr, viewTransform);
+
+
             while (Glfw.WindowShouldClose(windowPtr) == Glfw.False)
             {
                 stopwatch.Restart();
@@ -69,10 +78,7 @@ namespace LearnCSharp
 
                 skCanvas.Save();
 
-                Glfw.GetFramebufferSize(windowPtr, out var bufferWidth, out var bufferHeight);
-
-                skCanvas.Translate(bufferWidth / 2f, bufferHeight / 2f);
-                skCanvas.Scale(bufferWidth / Grid.Width * 0.95f);
+                skCanvas.SetMatrix(viewTransform);
 
                 // Clear the drawing canvas
                 skCanvas.Clear(SKColors.DimGray);

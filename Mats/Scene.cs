@@ -58,7 +58,6 @@ namespace LearnCSharp.Mats
         public void Update(float deltaTimeInSeconds, InputState input)
         {
 
-
             // Physics
 
             foreach (var item in updatables)

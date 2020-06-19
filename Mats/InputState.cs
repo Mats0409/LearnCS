@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LearnCSharp.libGLFW;
+using SkiaSharp;
 
 namespace LearnCSharp.Mats
 {
@@ -13,8 +14,11 @@ namespace LearnCSharp.Mats
         private readonly Dictionary<Key, KeyState> _currentKeyStates = new Dictionary<Key, KeyState>();
         private readonly Dictionary<Key, KeyState> _previousKeyStates = new Dictionary<Key, KeyState>();
 
-        public InputState(IntPtr windowPtr)
+        private SKMatrix _invViewTransform;
+
+        public InputState(IntPtr windowPtr, SKMatrix viewTransform)
         {
+            _invViewTransform = viewTransform.Invert();
             Glfw.SetCursorPosCallback(windowPtr, OnCursorPosChanged);
             Glfw.SetMouseButtonCallback(windowPtr, OnMouseButtonChanged);
             Glfw.SetKeyCallback(windowPtr, OnKeyChanged);
@@ -131,8 +135,9 @@ namespace LearnCSharp.Mats
 
         private void OnCursorPosChanged(IntPtr window, double xPos, double yPos)
         {
-            MousePositionX = (float)xPos;
-            MousePositionY = (float)yPos;
+            var localPos = _invViewTransform.MapPoint((float)xPos, (float)yPos);
+            MousePositionX = localPos.X;
+            MousePositionY = localPos.Y;
         }
     }
 }
