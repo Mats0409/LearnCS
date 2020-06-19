@@ -22,7 +22,7 @@ namespace LearnCSharp.Mats
             IsAntialias = true
         };
 
-      
+
         public void Update(float deltaTimeInSeconds, InputState input)
         {
             Velocity = Vector2.Zero;
@@ -46,7 +46,7 @@ namespace LearnCSharp.Mats
             {
                 Velocity += new Vector2(speed, 0);
             }
-            
+
             energy -= deltaTimeInSeconds * 10;
 
             Position += Velocity * deltaTimeInSeconds;
@@ -55,7 +55,7 @@ namespace LearnCSharp.Mats
 
         public void Draw(SKCanvas canvas)
         {
-            canvas.DrawRect(Position.X, Position.Y, size, size, paint);
+            canvas.DrawRect(Position.X - size / 2f, Position.Y - size / 2f, size, size, paint);
         }
 
     }

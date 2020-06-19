@@ -78,7 +78,7 @@ namespace LearnCSharp.Mats
         /// </summary>
         public bool IsKeyUp(Key key) => !_currentKeyStates.TryGetValue(key, out var state) || state == KeyState.Released;
 
-        public bool IsKeyPressed(Key key)
+        public bool IsKeyTapped(Key key)
         {
             var p = IsKeyDown(_previousKeyStates, key);
             var c = IsKeyDown(_currentKeyStates, key);

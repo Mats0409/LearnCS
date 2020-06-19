@@ -9,16 +9,11 @@ using SkiaSharp;
 
 namespace LearnCSharp.Mats
 {
+
     public class Scene : IEnumerable
     {
         private List<IDrawable> drawables = new List<IDrawable>();
         private List<IUpdatable> updatables = new List<IUpdatable>();
-
-        public const int GridWidth = 80;
-        public const int GridHeight = 45;
-
-        bool PreviousMouseDown;
-        bool CurrentMouseDown;
 
         SKPaint linePaint = new SKPaint
         {
@@ -32,7 +27,6 @@ namespace LearnCSharp.Mats
 
         public Scene()
         {
-
         }
 
         public void Add(object obj)
@@ -64,15 +58,6 @@ namespace LearnCSharp.Mats
         public void Update(float deltaTimeInSeconds, InputState input)
         {
 
-            if (input.IsMouseClicked(MouseButton.Right))
-            {
-
-            }
-
-
-            PreviousMouseDown = CurrentMouseDown;
-
-            CurrentMouseDown = input.IsMouseDown(MouseButton.Left);
 
             // Physics
 
@@ -85,16 +70,16 @@ namespace LearnCSharp.Mats
 
         public void Draw(SKCanvas canvas)
         {
-            for (float x = -GridWidth/2f; x <= GridWidth/2f; ++x)
+            for (float x = Grid.Left; x <= Grid.Right; ++x)
             {
 
-                canvas.DrawLine(x, -GridHeight/2f, x, GridHeight/2f, linePaint);
+                canvas.DrawLine(x, Grid.Top, x, Grid.Bottom, linePaint);
             }
 
-            for (float y = -GridHeight/2f; y <= GridHeight/2f; ++y)
+            for (float y = Grid.Top; y <= Grid.Bottom; ++y)
             {
 
-                canvas.DrawLine(-GridWidth/2f, y, GridWidth/2f, y, linePaint);
+                canvas.DrawLine(Grid.Left, y, Grid.Right, y, linePaint);
             }
 
             foreach (var item in drawables)

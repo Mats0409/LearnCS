@@ -18,7 +18,7 @@ namespace LearnCSharp.Mats
 
             var energyBar = new EnergyBar
             {
-                Position = new Vector2(-37, -22),
+                Position = new Vector2(Grid.Left, Grid.Top),
                 player = player
             };
 

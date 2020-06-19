@@ -72,7 +72,7 @@ namespace LearnCSharp
                 Glfw.GetFramebufferSize(windowPtr, out var bufferWidth, out var bufferHeight);
 
                 skCanvas.Translate(bufferWidth / 2f, bufferHeight / 2f);
-                skCanvas.Scale(bufferWidth / Scene.GridWidth * 0.95f);
+                skCanvas.Scale(bufferWidth / Grid.Width * 0.95f);
 
                 // Clear the drawing canvas
                 skCanvas.Clear(SKColors.DimGray);
@@ -108,16 +108,16 @@ namespace LearnCSharp
                     if (Glfw.GetWindowMonitor(windowPtr) == IntPtr.Zero)
                     {
                         // Switch to full screen.
-                        Glfw.SetWindowMonitor(windowPtr, primaryMonitorPtr, 0, 0, Scene.GridWidth, Scene.GridHeight, 60);
+                        Glfw.SetWindowMonitor(windowPtr, primaryMonitorPtr, 0, 0, Grid.Width, Grid.Height, 60);
                     }
                     else
                     {
                         // Switch to windowed mode
                         Glfw.SetWindowMonitor(windowPtr, IntPtr.Zero,
-                            workAreaX + (workAreaWidth - Scene.GridWidth) / 2,
-                            workAreaY + (workAreaHeight - Scene.GridHeight) / 2,
-                            Scene.GridWidth,
-                            Scene.GridHeight, 0);
+                            workAreaX + (workAreaWidth - Grid.Width) / 2,
+                            workAreaY + (workAreaHeight - Grid.Height) / 2,
+                            Grid.Width,
+                            Grid.Height, 0);
                     }
                 }
 
